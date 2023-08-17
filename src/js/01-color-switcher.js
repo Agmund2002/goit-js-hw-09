@@ -18,6 +18,7 @@ function handlerStart() {
     btn.start.disabled = true;
     btn.stop.disabled = false;
 
+    body.style.backgroundColor = getRandomHexColor();
     idInterval = setInterval(() => body.style.backgroundColor = getRandomHexColor(), 1000);
 }
 
