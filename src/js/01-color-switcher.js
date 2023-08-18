@@ -1,7 +1,3 @@
-function getRandomHexColor() {
-    return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
-  }
-
 const body = document.querySelector('body');
 const btn = {
     start: document.querySelector('button[data-start]'),
@@ -13,6 +9,8 @@ btn.stop.disabled = true;
 
 btn.start.addEventListener('click', handlerStart);
 btn.stop.addEventListener('click', handlerStop);
+
+// Функції
 
 function handlerStart() {
     btn.start.disabled = true;
@@ -28,3 +26,7 @@ function handlerStop() {
 
     clearInterval(idInterval);
 }
+
+function getRandomHexColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
+  }

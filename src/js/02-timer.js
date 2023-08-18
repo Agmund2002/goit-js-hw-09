@@ -1,6 +1,9 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import "notiflix/dist/notiflix-notify-aio-3.2.6.min.js"
+
 const elems = {
     btn: document.querySelector('button[data-start]'),
     days: document.querySelector('span[data-days]'),
@@ -10,8 +13,14 @@ const elems = {
 }
 
 elems.btn.disabled = true;
-let selectedDate = null;
-let intervalId = null;
+
+const vars = {
+    selectedDate: null,
+    intervalId: null,
+    currentDate: null,
+    timer: null,
+    convertedTime: null
+}
 
 const options = {
     enableTime: true,
@@ -19,13 +28,13 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        selectedDate = selectedDates[0];
-        console.log(selectedDate);
+        vars.selectedDate = selectedDates[0];
+        console.log(vars.selectedDate);
       
-      if (selectedDate > options.defaultDate) {
+      if (vars.selectedDate > options.defaultDate) {
         elems.btn.disabled = false;
       } else {
-        alert("Please choose a date in the future")
+        Notify.failure("Please choose a date in the future");
         elems.btn.disabled = true;
       }
     },
@@ -35,31 +44,42 @@ flatpickr('#datetime-picker', options);
 
 elems.btn.addEventListener('click', handlerBtn);
 
-function handlerBtn(evt) {
+// Функції
+
+function handlerBtn() {
     elems.btn.disabled = true;
-    intervalId = setInterval(() => {
-        const currentDate = new Date();
-        const timer = selectedDate - currentDate;
-        const convertedTime =  convertMs(timer);
 
-        elems.days.textContent = convertedTime.days;
-        elems.hours.textContent = convertedTime.hours;
-        elems.minutes.textContent = convertedTime.minutes;
-        elems.seconds.textContent = convertedTime.seconds;
+    now();
 
-        if (timer <= 0) {  
-            clearInterval(intervalId);
+    vars.intervalId = setInterval(() => {
+        now();
+
+        if (vars.timer <= 0) {  
+            clearInterval(vars.intervalId);
             elems.btn.disabled = false;
 
-            elems.days.textContent = 0;
-            elems.hours.textContent = 0;
-            elems.minutes.textContent = 0;
-            elems.seconds.textContent = 0;
+            elems.days.textContent = '00';
+            elems.hours.textContent = '00';
+            elems.minutes.textContent = '00';
+            elems.seconds.textContent = '00';
         }
     }, 1000);
 }
 
-// Службові функції
+function addLeadingZero(value) {
+    return value.toString().padStart(2, "0");
+}
+
+function now() {
+    vars.currentDate = new Date();
+    vars.timer = vars.selectedDate - vars.currentDate + 1000;
+    vars.convertedTime =  convertMs(vars.timer);
+
+    elems.days.textContent = addLeadingZero(vars.convertedTime.days);
+    elems.hours.textContent = addLeadingZero(vars.convertedTime.hours);
+    elems.minutes.textContent = addLeadingZero(vars.convertedTime.minutes);
+    elems.seconds.textContent = addLeadingZero(vars.convertedTime.seconds);
+}
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
