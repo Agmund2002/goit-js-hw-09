@@ -56,3 +56,20 @@ img {
   font-size: 35px;
   color: rebeccapurple;
 }
+
+/* Завдання 3 */
+
+.form {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.form > label {
+  display: flex;
+  flex-direction: column;
+}
+
+.form > button {
+  height: 21px;
+}
