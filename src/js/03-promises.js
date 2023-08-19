@@ -30,7 +30,7 @@ function handlerForm(evt) {
     });
 
     count++;
-    delays += numValue.step;
+    delays = numValue.step;
 
     timerId = setTimeout(run, delays)
 
