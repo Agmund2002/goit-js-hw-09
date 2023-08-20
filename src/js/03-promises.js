@@ -30,14 +30,14 @@ function handlerForm(evt) {
     });
 
     count++;
-    delays = numValue.step;
+    delays += numValue.step;
 
-    timerId = setTimeout(run, delays)
+    timerId = setTimeout(run, numValue.step)
 
     if (count > numValue.amount) {
       clearTimeout(timerId);
     }
-  }, delays)
+  }, numValue.delay)
 
   evt.currentTarget.reset();
 }
